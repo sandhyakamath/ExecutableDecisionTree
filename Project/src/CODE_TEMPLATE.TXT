@@ -1,0 +1,77 @@
+#include <iostream>
+#include <string>
+#include <string.h>
+using namespace std;
+
+string predict( string ARGS );
+void find_str(string s, string del,int offset,string &result) {
+    // Use find function to find 1st position of delimiter.
+
+    int end = s.find(del);
+    int i=0;
+    while (end != -1) { // Loop until no delimiter is left in the string.
+        string temp = s.substr(0, end);
+        if ( i++ == offset ) { result =  temp;  return; }
+        s.erase(s.begin(), s.begin() + end + 1);
+        end = s.find(del);
+    }
+    result =  s.substr(0, end);
+}
+
+
+
+string interpret(int offset, string args ) {
+
+   string **arr= new string *[100];
+  // for(int i=0;i<100;++i) { *arr[i] = (string)""; }
+
+   int cnt = 0;
+   string result ="";
+   find_str(args,",",offset,result);
+   return result;
+
+
+}
+
+string cmd_get_s( int offset,string args ) {
+
+	return interpret(offset,args);
+ }
+
+int cmd_get_i( int offset, string S ) {
+	string n = interpret(offset,S);
+	return atoi(n.c_str());
+ }
+
+double cmd_get_d(int offset, string S ) {
+	string n = interpret(offset,S);
+	return atof(n.c_str());
+ }
+
+bool cmd_get_b( int offset,string S ) {
+	string n = interpret(offset,S);
+	return n == "TRUE"? true:false;
+}
+
+extern "C"  bool predict_call(const char *str, char *str2 ) {
+   string ret = predict(string(str));
+   strcpy(str2, ret.c_str());
+   return true;
+}
+
+int main(int argc , char **argv) {
+	if ( argc <= 1 ) {
+		return 0;
+	}
+	string strs = "";
+	for(int i=1; i<argc; ++ i )
+	{
+		strs += string(argv[i]) + "|";
+	}
+        cout << strs << endl;
+	string rs = predict(strs);
+	cout << "Predicted ....." << rs << "$$$" << endl;
+	return 0;
+
+ }
+

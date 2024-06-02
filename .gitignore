@@ -1,0 +1,7 @@
+out
+manifest.txt
+.idea
+Project/src/.idea
+Project/META-INF
+Project/src/META-INF
+*.iml
